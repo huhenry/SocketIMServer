@@ -1,0 +1,15 @@
+{
+  "name": "SocketIMServer",
+  "version": "0.0.1",
+  "author": "Henry Hu <Huhenry.bj@hotmail.com>",
+  "description": "Socket Instense message server",
+  "dependencies": {
+    "express": "~4.11.2",
+    "mysql": "~2.5.5",
+    "redis": "^2.6.2",
+    "socket.io": "~1.3.3",
+    "socket.io-redis": "^1.0.0"
+  },
+  "repository": " ",
+  "license": "MIT"
+}
