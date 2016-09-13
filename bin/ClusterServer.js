@@ -124,7 +124,7 @@ if (cluster.isMaster) {
                     socket.emit('authenticated', success);
 
 
-                    receiveMessage(data.email, function (err, messages) {
+                    receiveMessage(data.email.toLowerCase(), function (err, messages) {
                         if (err) return;
                         var sendMessage = [];
                         if (messages.length > 0) {
@@ -190,9 +190,11 @@ if (cluster.isMaster) {
                 var now = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
                 data.sendDate = now;
+                var comments =[];
+                comments.push(data);
                 //log.info("send message %s to %s ", data.message, target.email)
                 console.log("send message %s to %s",data.message, target.email);
-                target.emit("receiveMessage", data);
+                target.emit("receiveMessage", comments);
                 message.SaveMessage(data.from.toLowerCase(), data.to.toLowerCase(), data.message, now, now, function (err, data) {
 
                 });
