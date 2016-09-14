@@ -68,7 +68,7 @@ if (cluster.isMaster) {
     // Here you might use middleware, attach routes, etc.
     // Don't expose our internal server to the outside.
     var server = app.listen(0, 'localhost'),
-        io = sio(server);
+        io = sio(server,{'pingInterval': 10000, 'pingTimeout': 25000});
 
     // Tell Socket.IO to use the redis adapter. By default, the redis
     // server is assumed to be on localhost:6379. You don't have to
@@ -123,6 +123,10 @@ if (cluster.isMaster) {
 
                     socket.emit('authenticated', success);
 
+                    var onlineusers = Object.keys(connections);
+                    console.log("online Users &ss",onlineusers);
+                    io.emit('onlineUsers',onlineusers);
+
 
                     receiveMessage(data.email.toLowerCase(), function (err, messages) {
                         if (err) return;
@@ -167,13 +171,30 @@ if (cluster.isMaster) {
 
 
         socket.on('disconnect', function (clientInfo) {
-            usersConnected--
+
+            if(socket.email)
+            {
+
+                io.emit("offline",socket.email);
+
+                console.log("user %s is offline!",socket.email);
+            }
+            else{
+
+                console.log("user %s is offline!",socket.id);
+            }
+
+            console.log("There are %s users online!", usersConnected.toString());
             // remove online connectios when client socket disconnect
             if (connections[socket.email]) {
-                connections[socket.email] = null;
+
+                usersConnected--;
+                delete connections[socket.email];
             }
-            console.log("user %s is offline!",socket.id);
-            console.log("There are %s users online!", usersConnected.toString());
+
+            var onlineusers = Object.keys(connections);
+            console.log("online Users &ss",onlineusers);
+            io.emit('onlineUsers',onlineusers);
         });
 
 
