@@ -68,7 +68,7 @@ if (cluster.isMaster) {
     // Here you might use middleware, attach routes, etc.
     // Don't expose our internal server to the outside.
     var server = app.listen(0, 'localhost'),
-        io = sio(server,{'pingInterval': 10000, 'pingTimeout': 25000});
+        io = sio(server,{'pingInterval': 10000, 'pingTimeout': 60000});
 
     // Tell Socket.IO to use the redis adapter. By default, the redis
     // server is assumed to be on localhost:6379. You don't have to
